@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank System</title>
+</head>
+<body>
+    <h2>Bank System</h2>
+    <h3>features</h3>
+    <ul>
+        <li>Deposit</li>
+        <li>withdraw</li>
+        <li>Check Balance</li>
+        <li>Private Data (Secure)</li>
+    </ul>
+
+    <figure>
+        <pre>
+            <p>
+                function createBankAccount(initialBalance) {
+                    let balance = initialBalance; // private variable
+
+                    return {
+                        deposit: function(amount) {
+                        balance += amount;
+                        console.log(`Deposited: ${amount}`);
+                        },
+
+                        withdraw: function(amount) {
+                        if (amount > balance) {
+                            console.log("Insufficient balance");
+                        } else {
+                            balance -= amount;
+                            console.log(`Withdrawn: ${amount}`);
+                        }
+                        },
+
+                        checkBalance: function() {
+                        console.log(`Current Balance: ${balance}`);
+                        }
+                    };
+                    }
+
+                    // create account
+                    const account = createBankAccount(1000);
+
+                    // operations
+                    account.deposit(500);
+                    account.withdraw(300);
+                    account.checkBalance();
+            </p>
+        </pre>
+    </figure>
+
+    <h1>Output:</h1>
+    <figure>
+        <pre>
+            <p>
+                Deposited: 500
+                Withdrawn: 300
+                Current Balance: 1200
+            </p>
+        </pre>
+    </figure>
+
+    <Script>
+        function createBankAccount(initialBalance) {
+            let balance = initialBalance;
+            return {
+                deposit: function (amount){
+                    balance += amount;
+                    console.log("Deposited:", amount);
+                },
+                withdraw: function(amount){
+                    if (amount > balance) {
+                        console.log("Insufficient Balance");
+                    }else {
+                        balance -= amount;
+                        console.log("withdrawn:", amount);
+                    }
+                },
+                checkBalance: function (){
+                    console.log("Current Balance:", balance);
+                }
+            };
+        }
+
+        const account = createBankAccount(1000);
+
+        account.deposit(500);
+        account.withdraw(300);
+        account.checkBalance();
+    </Script>
+</body>
+</html>
