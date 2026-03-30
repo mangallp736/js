@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Call Back</h1>
+    <script>
+        /*setTimeout(() => {
+            console.log("Step 1");
+
+            setTimeout(() => {
+                console.log("step 2");
+                
+                setTimeout(() => {
+                    console.log("Step 3");
+                }, 1000);
+            }, 1000);
+        }, 1000);*/
+    </script>
+    <hr>
+    <h1>Basic Promise</h1>
+    <script>
+        const promise = new Promise((resolve, reject) => {
+            let success = true;
+            if(success){
+                resolve("Data is finding");
+            }else {
+                reject("Error:");
+            }
+        });
+        /// Use Promise
+
+        Promise
+        .then((data) => {
+            console.log(data);
+        })
+        .catch((Error) => {
+            console.log(Error);
+        });
+
+    </script>
+</body>
+</html>
