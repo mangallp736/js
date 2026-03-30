@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Closures in javaScript</title>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+</head>
+<body>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+    <div class="container">
+    <h3>A closure in JavaScript is a function that 
+        remembers and has continuous access to 
+        variables from its outer (lexical) scope, 
+        even after the outer function has finished executing.</h3>
+        <br>
+        <h2>How Closures Work</h2>
+        <p>Closures operate based on <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures" target="_blank">lexical scoping</a>
+            , which means that a function's scope is determined by where it is defined in the source code, not where it is executed.</p>
+
+            <u>
+                <li><strong>Function Creation:</strong>When an inner function is created, it retains a hidden reference to its lexical environment, 
+                    which includes any variables that were in scope at that moment.</li>
+                <li><strong>Persistence of State:</strong>Even after the outer function's execution context is destroyed, the inner function's 
+                    reference prevents the outer scope's variables from being garbage collected, preserving their state.</li>
+            </u>
+            <h2>Common Use Cases</h2>
+            <p>Closures are a fundamental and powerful feature used in many common JavaScript patterns.</p>
+            <ul>
+                <li><strong>Data Privacy (Encapsulation):</strong> Closures allow you to create private variables and methods that are not accessible from the outside,
+                     only through specific functions provided in a public interface.
+
+                     <figure>
+                        <pre>
+                        function createCounter() {
+                        let count = 0; // This is a private variable
+                        return {
+                            increment: function() {
+                            count++;
+                            },
+                            getCount: function() {
+                            return count;
+                            }
+                        };
+                        }
+                        const counter = createCounter();
+                        counter.increment();
+                        console.log(counter.getCount()); // Output: 1
+                        console.log(counter.count); // Output: undefined (inaccessible from outside)
+                    </pre>
+                     </figure>
+                    </li>
+                    <li><strong>Function Factories: </strong>You can use closures to create functions dynamically with pre-configured settings or arguments.
+                    <figure>
+                        <pre>
+                            function makeAdder(x) {
+                                return function(y) {
+                                    return x + y;
+                                };
+                                }
+                                const addFive = makeAdder(5);
+                                console.log(addFive(2)); // Output: 7 (remembers x as 5)
+                        </pre>
+                    </figure>
+                    </li>
+                    <li>
+                        <strong>Asynchronous Operations & Event Handlers: </strong>
+                        Closures ensure that callback functions in asynchronous operations (like setTimeout,
+                         promises, or event listeners) retain access to the correct variables from their 
+                         environment at the time they were created.
+                    </li>
+                    <li>
+                        <strong>Module Pattern: </strong>Closures form the basis of the module pattern, 
+                        which helps organize code and prevent global scope pollution.
+                    </li>
+                    <li>
+                        <strong>Currying and Memoization: </strong>They are also essential in functional programming 
+                        techniques like function currying (transforming a function with multiple arguments into a sequence 
+                        of functions) and memoization (caching results of expensive function calls).
+                    </li>
+            </ul>
+
+            <h2 class="text-info">Basic Example</h2>
+            <form class="bs-example bs-example-form" data-example-id="input-group-with-button">
+                <div class="row">                
+                <figure>
+                    <pre>
+                        function outer() {
+                            let count = 0;
+
+                            function inner() {
+                                count++;
+                                console.log(count);
+                            }
+
+                            return inner;
+                            }
+
+                            const counter = outer();
+
+                            counter(); // 1
+                            counter(); // 2
+                            counter(); // 3
+                    </pre>
+                </figure>
+            </div>
+            </form>
+        <p class="text-success" id="demo">Output:</p>
+    </div>
+
+    <script>
+        
+        function outer () {
+            let count = 0;
+
+            function inner () {
+                count++;
+                console.log(count);
+            }
+            return inner;
+        }
+        
+        const counter = outer();
+
+        counter();
+        counter();
+        counter();
+
+//////////////////
+
+/*
+    Closure ka matlab:
+
+    Function apna environment lock kar leta hai
+    Data safe rehta hai (private ban jata hai)
+
+*/
+
+///Real use case
+///Private Variable banana
+
+        function bankAccount () {
+            let balance = 10000;
+
+            return {
+                deposit: function (amount) {
+                    balance += amount;
+
+                    console.log("Balance: ", balance);
+                },
+                withdraw: function (amount) {
+                    balance -= amount;
+                    console.log("Balance:", balance);
+                }
+            };
+        }
+
+        const account = bankAccount();
+        account.deposit(5000);
+        account.withdraw(2000);
+
+
+        //////////
+        ///Common Interview Question 
+
+        function test(){
+            let x = 10;
+
+            return function(){
+                console.log(x);
+            };
+        }
+
+        const fn = test();
+        fn(); 
+        //Output: 10 
+
+        /////////////////
+        
+        /* Closure Loop*/
+
+       /* for(var i = 1; i <= 4; i++){
+            setTimeout(function(){
+                console.log(i);
+            }, 1000);
+        }
+
+        ////var function scoped so return i
+
+        ////////////// using let
+
+        for(let i = 1; i <= 3; i++){
+            setTimeout(function(){
+                console.log(i);
+            }, 1000);
+        }*/
+
+        /*
+        ///Hands-on Tasks
+
+        task1 
+        currect with using closure
+        ////
+        const count = createCounter();
+            count(); // 1
+            count(); // 2
+        */
+
+        ///Task 1
+
+        function createCounter(){
+            let count1 = 0;
+
+            function counter(){
+                count1++;
+                console.log(count1);
+            }
+            return counter;
+        }
+
+        const count = createCounter();
+
+        count();
+        count();
+
+        ////////////////
+        ///Normal function use
+        /*function createUser(name){
+            const userName = {
+                name: name,
+                printName: function () {
+                    console.log(this.name);                
+                }
+            };
+            return userName;
+        } 
+
+        const userName1 = createUser("Dharmendra");
+
+        userName1.printName();
+        
+         */
+
+        ////use closure function
+
+        function createName(){
+            let savedName = "";
+
+            return function (name){
+                savedName = name;
+                console.log(savedName);
+            };            
+        }
+
+        const printName = createName();
+
+        printName("Anjali");
+        printName("Tannu");
+
+        ////////// explain this
+        
+        function abc(){
+            let a = 55;
+
+            return function (){
+                console.log(a);
+            };
+
+        }
+
+        const xyz = abc();
+
+        xyz();        /*Closure = function + lexical environment (variables)*/
+
+        //////Task 4  importent 
+
+        function multiply(x){
+            return function(y) {            
+                return x * y;                
+            };
+        }
+        const double = multiply();
+        console.log(double(5));
+        console.clear();
+/////////////////////////////////
+
+
+    </script>
+</body>
+</html>
