@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promises</title>
+</head>
+<body>
+    <div>
+        <h1>What is Promise</h1>
+        <h3><strong>JavaScript Promises</strong> were created to make <strong>asynchronous JavaScript easier</strong> to use.</h3>
+        <h3>A Promise object represents the <strong>completion</strong> or <strong>failure</strong> of an 
+            <strong>asynchronous operation.</strong> </h3>
+        <h3>A Promise can be in one of <strong>three exclusive states:</strong> </h3>
+
+        <ul>
+            <li>pending   &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	operation started (not finished)</li>
+            <li>rejected &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; operation failed</li>
+            <li>fulfilled	&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; operation completed</li>
+        </ul>
+        <br><hr>
+        <h1>Why Promises?</h1>
+        <h3>Many callbacks become hard to read and hard to maintain.</h3>
+        <div>
+            <h2>Example:</h2>
+            <figure>
+                <pre>
+                    step1(function(r1) {
+                        step2(r1, function(r2) {
+                            step3(r2, function(r3) {
+                            console.log(r3);
+                            });
+                        });
+                    });
+                </pre>
+            </figure>
+        </div>
+        <mark style="color: hsl(268, 98%, 50%);">
+            <h3>The style above is often called <strong>callback hell.</strong></h3>
+            <h3>Promises let you write the <strong>same logic in a cleaner way.</strong> </h3>
+        </mark>
+    </div>
+    <div>
+        <h1>Basic Promise</h1>
+    </div>
+</body>
+</html>
+
+<script>
+    const promise = new Promise((resolve, reject) => {
+        let success = true;
+
+        if (!success) {
+            resolve("Data found!!");
+        } else{
+            reject("Error Found!!!!!");
+        }
+    })
+
+    promise
+    .then((data) => {
+        console.log(data);
+    })
+    .catch((error) => {
+        console.log(error);
+        
+    });
+</script>
