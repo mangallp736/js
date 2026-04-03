@@ -1,0 +1,172 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Bank System</title>
+    <style>
+      body {
+        font-family: Arial;
+        padding: 30px;
+      }
+
+      input {
+        padding: 8px;
+        margin-bottom: 10px;
+      }
+
+      button {
+        padding: 8px 12px;
+        margin: 5px;
+        border: none;
+        color: white;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+
+      .deposit {
+        background: green;
+      }
+      .withdraw {
+        background: red;
+      }
+      .balance {
+        background: orange;
+      }
+      .history {
+        background: blue;
+      }
+
+      #output {
+        margin-top: 15px;
+        font-weight: bold;
+      }
+
+      ul {
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Bank System</h1>
+
+    <input type="number" id="amount" placeholder="Enter amount" />
+
+    <br />
+
+    <button class="deposit" onclick="deposit()">Deposit</button>
+    <button class="withdraw" onclick="withdraw()">Withdraw</button>
+    <button class="balance" onclick="checkBalance()">Check Balance</button>
+    <button class="history" onclick="showHistory()">Check History</button>
+
+    <div id="output"></div>
+    <ul id="historyList"></ul>
+
+    <script>
+      function createBankAccount(initialBalance) {
+        let balance = Number(localStorage.getItem("balance")) || initialBalance;
+        let history = JSON.parse(localStorage.getItem("history")) || [];
+
+        function saveData() {
+          localStorage.setItem("balance", balance);
+          localStorage.setItem("history", JSON.stringify(history));
+        }
+
+        function generateUTR() {
+          return "UTR" + Date.now() + Math.floor(Math.random() * 10000);
+        }
+
+        return {
+          deposit(amount) {
+            if (!amount || amount <= 0) {
+              return "❌ Enter valid amount!";
+            }
+
+            balance += amount;
+
+            history.push({
+              type: "Credit",
+              amount,
+              utr: generateUTR(),
+            });
+
+            saveData();
+            return "✅ Deposited ₹" + amount;
+          },
+
+          withdraw(amount) {
+            if (!amount || amount <= 0) {
+              return "❌ Enter valid amount!";
+            }
+
+            if (amount > balance) {
+              return "❌ Insufficient balance!";
+            }
+
+            balance -= amount;
+
+            history.push({
+              type: "Debit",
+              amount,
+              utr: generateUTR(),
+            });
+
+            saveData();
+            return "✅ Withdrawn ₹" + amount;
+          },
+
+          checkBalance() {
+            return "💰 Balance: ₹" + balance;
+          },
+
+          getHistory() {
+            return history;
+          },
+        };
+      }
+
+      const account = createBankAccount(10000);
+
+      function getAmount() {
+        return Number(document.getElementById("amount").value);
+      }
+
+      function showOutput(msg) {
+        document.getElementById("output").innerText = msg;
+      }
+
+      function deposit() {
+        showOutput(account.deposit(getAmount()));
+      }
+
+      function withdraw() {
+        showOutput(account.withdraw(getAmount()));
+      }
+
+      function checkBalance() {
+        showOutput(account.checkBalance());
+      }
+
+      function showHistory() {
+        const list = account.getHistory();
+        const ul = document.getElementById("historyList");
+
+        if (list.length === 0) {
+          ul.innerHTML = "<li>No transactions yet</li>";
+          return;
+        }
+
+        ul.innerHTML = list
+          .map((item) => {
+            const color = item.type === "Credit" ? "green" : "red";
+
+            return `
+        <li style="color:${color}">
+          ${item.type} ₹${item.amount} | ${item.utr}
+        </li>
+      `;
+          })
+          .join("");
+      }
+    </script>
+  </body>
+</html>

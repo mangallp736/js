@@ -1,0 +1,223 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Pro Bank App</title>
+    <style>
+      body {
+        font-family: Arial;
+        padding: 20px;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      input {
+        padding: 8px;
+        margin: 5px;
+      }
+
+      button {
+        padding: 8px 12px;
+        margin: 5px;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        cursor: pointer;
+      }
+
+      .green {
+        background: green;
+      }
+      .red {
+        background: red;
+      }
+      .blue {
+        background: blue;
+      }
+      .orange {
+        background: orange;
+      }
+
+      #dashboard {
+        margin-top: 20px;
+      }
+
+      li {
+        margin: 5px 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>🏦 Pro Bank System</h1>
+
+    <!-- LOGIN -->
+    <div id="login">
+      <input id="name" placeholder="Enter Name" />
+      <input id="pin" type="password" placeholder="Enter PIN" />
+      <button class="blue" onclick="login()">Login / Create</button>
+    </div>
+
+    <!-- APP -->
+    <div id="app" class="hidden">
+      <h2 id="welcome"></h2>
+
+      <input id="amount" type="number" placeholder="Enter amount" />
+
+      <br />
+
+      <button class="green" onclick="deposit()">Deposit</button>
+      <button class="red" onclick="withdraw()">Withdraw</button>
+      <button class="orange" onclick="showBalance()">Balance</button>
+      <button class="blue" onclick="showHistory()">History</button>
+
+      <button onclick="logout()">Logout</button>
+
+      <h3 id="output"></h3>
+
+      <h3>Transactions</h3>
+      <select onchange="filterHistory(this.value)">
+        <option value="all">All</option>
+        <option value="Credit">Credit</option>
+        <option value="Debit">Debit</option>
+      </select>
+
+      <ul id="historyList"></ul>
+    </div>
+
+    <script>
+      let accounts = JSON.parse(localStorage.getItem("accounts")) || [];
+      let currentUser = null;
+
+      function saveAccounts() {
+        localStorage.setItem("accounts", JSON.stringify(accounts));
+      }
+
+      function generateUTR() {
+        return "UTR" + Date.now() + Math.floor(Math.random() * 10000);
+      }
+
+      function login() {
+        const name = document.getElementById("name").value;
+        const pin = document.getElementById("pin").value;
+
+        if (!name || !pin) {
+          alert("Enter details!");
+          return;
+        }
+
+        let user = accounts.find((acc) => acc.name === name && acc.pin === pin);
+
+        if (!user) {
+          user = {
+            name,
+            pin,
+            balance: 10000,
+            history: [],
+          };
+          accounts.push(user);
+          saveAccounts();
+        }
+
+        currentUser = user;
+
+        document.getElementById("login").classList.add("hidden");
+        document.getElementById("app").classList.remove("hidden");
+
+        document.getElementById("welcome").innerText = "Welcome " + user.name;
+      }
+
+      function getAmount() {
+        return Number(document.getElementById("amount").value);
+      }
+
+      function showOutput(msg) {
+        document.getElementById("output").innerText = msg;
+      }
+
+      function deposit() {
+        const amount = getAmount();
+
+        if (amount <= 0) return showOutput("Invalid amount");
+
+        currentUser.balance += amount;
+
+        currentUser.history.push({
+          type: "Credit",
+          amount,
+          utr: generateUTR(),
+          time: new Date().toLocaleString(),
+        });
+
+        saveAccounts();
+        showOutput("Deposited ₹" + amount);
+      }
+
+      function withdraw() {
+        const amount = getAmount();
+
+        if (amount <= 0) return showOutput("Invalid amount");
+
+        if (amount > currentUser.balance) {
+          return showOutput("Insufficient balance");
+        }
+
+        currentUser.balance -= amount;
+
+        currentUser.history.push({
+          type: "Debit",
+          amount,
+          utr: generateUTR(),
+          time: new Date().toLocaleString(),
+        });
+
+        saveAccounts();
+        showOutput("Withdrawn ₹" + amount);
+      }
+
+      function showBalance() {
+        showOutput("Balance: ₹" + currentUser.balance);
+      }
+
+      function showHistory(filter = "all") {
+        const list = currentUser.history;
+        const ul = document.getElementById("historyList");
+
+        let filtered = list;
+
+        if (filter !== "all") {
+          filtered = list.filter((item) => item.type === filter);
+        }
+
+        if (filtered.length === 0) {
+          ul.innerHTML = "<li>No transactions</li>";
+          return;
+        }
+
+        ul.innerHTML = filtered
+          .map((item) => {
+            const color = item.type === "Credit" ? "green" : "red";
+
+            return `
+      <li style="color:${color}">
+        ${item.type} ₹${item.amount} | ${item.utr} <br>
+        <small>${item.time}</small>
+      </li>
+    `;
+          })
+          .join("");
+      }
+
+      function filterHistory(type) {
+        showHistory(type);
+      }
+
+      function logout() {
+        currentUser = null;
+        document.getElementById("app").classList.add("hidden");
+        document.getElementById("login").classList.remove("hidden");
+      }
+    </script>
+  </body>
+</html>

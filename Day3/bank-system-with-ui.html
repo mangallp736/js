@@ -1,122 +1,173 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bank System</title>
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <link rel="stylesheet" href="../bootstrap-3/css/bootstrap.min.css" />
 
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap-theme.min.css" integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
-
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
-</head>
-<body>
+    <script src="../bootstrap-3/js/jquery.min.js"></script>
+  </head>
+  <body>
     <div class="container">
-        <h2>Bank System</h2>
-        <form >
-            <div class="form-group">
-                <input type="number" id="amount" placeholder="Enter amount" class="" />               
-            </div>
-            <div class="form-group">
-                <button type="button" class="btn btn-success" onclick="deposit()">Deposit</button>  
-                <button type="button" class="btn btn-danger" onclick="withdraw()">Withdraw</button>   
-                <button type="button" class="btn btn-warning" onclick="checkBalance()">Check Balance</button>
-                <button type="button" class="btn btn-info" onclick="showHistory()">Check history</button>
-            </div>
-            <!-- <div class="form-group">
+      <h2>Bank System</h2>
+      <form>
+        <div class="form-group">
+          <input
+            type="number"
+            id="amount"
+            placeholder="Enter amount"
+            class=""
+          />
+        </div>
+        <div class="form-group">
+          <button type="button" class="btn btn-success" onclick="deposit()">
+            Deposit
+          </button>
+          <button type="button" class="btn btn-danger" onclick="withdraw()">
+            Withdraw
+          </button>
+          <button
+            type="button"
+            class="btn btn-warning"
+            onclick="checkBalance()"
+          >
+            Check Balance
+          </button>
+          <button type="button" class="btn btn-info" onclick="showHistory()">
+            Check history
+          </button>
+        </div>
+        <!-- <div class="form-group">
                 <button type="button" class="btn btn-info" onclick="showHistory()">Check history</button>
             </div> -->
-            <div class="form-group">
-                <h3 id="output"></h3>
-            </div>
-            <div class="form-group">
-                <ul id="history"  class="list-group"></ul>
-            </div>
-        </form>        
+        <div class="form-group">
+          <h3 id="output"></h3>
+        </div>
+        <div class="form-group">
+          <ul id="history" class="list-group"></ul>
+        </div>
+      </form>
     </div>
-</body>
+  </body>
 </html>
 
 <script>
-    function createBnkAccount(initialBalance) {
-        let balance = initialBalance;
-        let history = [];
-        return {
-            deposit(amount){
-                if (!account || account <= 0) {
-                    return "Enter valid Amount!!!"
-                }
-                balance += amount;
-                history.push("+ ₹" + amount);
-                return "Deposited: ₹" + amount;
-            },
-            withdraw(amount){
-                if (!amount || amount <= 0) {
-                    return "Enter valid amount";
-                }
-                if(amount > balance){
-                    return "Insufficien Balance";
-                }
-                balance -= amount;
-                history.push("- ₹ " + amount);
-                return "Withdrawn:" + amount;
-            },
+  function createBnkAccount(initialBalance) {
+    // let balance = initialBalance;
+    // let history = [];
 
-            checkBalance(){
-                return "Current Balance:" + balance;
-            },
-            getHistory() {
-                return history;
-            }
-        };
+    let saveBalance = localStorage.getItem("balance");
+    let saveHistory = localStorage.getItem("history");
+
+    let balance = saveBalance ? Number(saveBalance) : initialBalance;
+
+    let history = saveHistory ? JSON.parse(saveHistory) : [];
+
+    function saveData() {
+      localStorage.setItem("balance", balance);
+      localStorage.setItem("history", JSON.stringify(history));
     }
 
-    
-
-    const account = createBnkAccount(10000);
-    
-     /*UI function Update*/
-
-    function getAmount() {
-        return Number(document.getElementById("amount").value);
-    }
-
-    function showOutput(message) {
-        document.getElementById("output").innerHTML = message;
-    }
-
-    function deposit() {
-        const amount = getAmount();
-        showOutput(account.deposit(amount));
-    }
-
-    function withdraw() {
-        const amount = getAmount();
-        showOutput(account.withdraw(amount))
-    }
-
-    function checkBalance() {
-        const amount = getAmount();
-        showOutput(account.checkBalance());
-    }
-
-    function showHistory() {
-        const list = account.getHistory();
-        const historyDiv = document.getElementById("history");
-
-        if (list.length === 0) {
-            historyDiv.innerHTML = "No Transection Yet!";
-            return;
+    return {
+      deposit(amount) {
+        if (!account || account <= 0) {
+          return "Enter valid Amount!!!";
         }
-        //historyDiv.innerHTML = list.map(item => "<li>" + item + "</li>").join("");
+        balance += amount;
+        history.push("+ ₹" + amount);
 
-        historyDiv.innerHTML = list.map(item => {
-            const color = item.startsWith("+") ? "green" : "red";
+        saveData();
 
-            return `<li style=" color:${color}; font-weight:bold;"> ${item} </li>`;
-        })
+        return "Deposited: ₹" + amount;
+      },
+      withdraw(amount) {
+        if (!amount || amount <= 0) {
+          return "Enter valid amount";
+        }
+        if (amount > balance) {
+          return "Insufficien Balance";
+        }
+        balance -= amount;
+        history.push("- ₹ " + amount);
+
+        saveData();
+
+        return "Withdrawn:" + amount;
+      },
+
+      checkBalance() {
+        return "Current Balance:" + balance;
+      },
+      getHistory() {
+        return history;
+      },
+    };
+  }
+
+  const account = createBnkAccount(10000);
+
+  /*UI function Update*/
+
+  function getAmount() {
+    return Number(document.getElementById("amount").value);
+  }
+
+  function showOutput(message) {
+    document.getElementById("output").innerHTML = message;
+  }
+
+  function deposit() {
+    const amount = getAmount();
+    showOutput(account.deposit(amount));
+  }
+
+  function withdraw() {
+    const amount = getAmount();
+    showOutput(account.withdraw(amount));
+  }
+
+  function checkBalance() {
+    const amount = getAmount();
+    showOutput(account.checkBalance());
+  }
+
+  function showHistory() {
+    const list = account.getHistory();
+    const historyDiv = document.getElementById("history");
+
+    if (list.length === 0) {
+      historyDiv.innerHTML = "No Transection Yet!";
+      return;
     }
+    //historyDiv.innerHTML = list.map(item => "<li>" + item + "</li>").join("");
+
+    function generateUTR() {
+      const timestamp = Date.now(); ///current time
+      const rendom = Math.floor(Math.random() * 10000000); ///rendom number
+      return "UTR" + timestamp + rendom;
+    }
+
+    //console.log(generateUTR());
+    ///
+    historyDiv.innerHTML = list.map((item) => {
+      const color = item.startsWith("+") ? "green" : "red";
+
+      const nurretion = item.startsWith("+") ? "Credit" : "Devit";
+
+      const utrNum = generateUTR();
+
+      return (
+        "<li style='color:" +
+        color +
+        "; font-weight:bold;'>" +
+        item +
+        "/" +
+        utrNum +
+        "/" +
+        nurretion +
+        "</li>"
+      );
+    });
+  }
 </script>

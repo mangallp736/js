@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+</html>
+
+<script>
+    ////Generete UTR Number
+////Simple UTR Generator (JS)
+    function generateUTR() {
+    const timestamp = Date.now(); // current time
+    const random = Math.floor(Math.random() * 1000000); // random number
+    return "UTR" + timestamp + random;
+}
+
+console.log(generateUTR());
+
+////////////Better Format (Readable UTR)
+
+function generateUTR() {
+    const date = new Date();
+
+    const part1 = date.getFullYear().toString().slice(2); // YY
+    const part2 = String(date.getMonth() + 1).padStart(2, '0'); // MM
+    const part3 = String(date.getDate()).padStart(2, '0'); // DD
+
+    const random = Math.floor(100000 + Math.random() * 900000); // 6-digit
+
+    return `UTR${part1}${part2}${part3}${random}`;
+}
+
+console.log(generateUTR());
+
+/////////////Advanced (More Unique - Recommended)
+
+function generateUTR() {
+    return 'UTR-' + crypto.randomUUID();
+}
+
+console.log(generateUTR());
+</script>
