@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+</html>
+
+<script>
+    // write a code using JS promise which is get message after 2 minutes
+
+    const myPromise = new Promise((accept, reject) => {
+        setTimeout(() => {
+            accept("Accepted After 2 second");
+        }, 2000);
+    });
+    myPromise.then((data) => {
+        console.log(data);
+    });
+
+
+    //// Output:  Accepted After 2 second
+
+    /* 
+        new Promise() -- created a new async task
+
+        setTimeout(..., 2000)   wait 2 second 
+
+        And accept()
+
+        after success send a message
+
+        .then()
+
+        handel the accept's result
+
+        Output: Accepted after 2 second
+    
+    */
+
+
+   //Second option 
+
+    const promise = new Promise((done, failed) => {
+        setTimeout(() => {
+            done("Done Message After 2 second ");
+        }, 2000);
+    });
+    
+    promise.then((data) => {
+        console.log(data);
+    });
+</script>
+
