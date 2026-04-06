@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>async</title>
+</head>
+<body>
+    async/await function
+    Press f12
+</body>
+</html>
+
+<script>
+    /*
+
+    function test() {
+    return new Promise((resolve) => {
+        resolve(10);
+    });
+    }
+
+        us async/await
+    
+    */
+
+   function test() {
+    return new Promise((resolve) => {
+        resolve(20);
+    })
+   }
+
+   async function getTest() {
+    try {
+        const result = await test();
+        console.log(result);
+    } catch (error) {
+        console.log("Error:", error);
+        
+    }
+   }
+   getTest();
+/*
+   fetch("https://jsonplaceholder.typicode.com/posts/1")
+
+   using async/await
+*/   
+
+async function getUrl() {
+    const res = await fetch("https://jsonplaceholder.typicode.com/users");
+    const data = await res.json();
+    console.log(data);
+}
+
+getUrl();
+</script>
