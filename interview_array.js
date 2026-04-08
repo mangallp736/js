@@ -24,4 +24,4 @@ const grouped = users.reduce((acc, user) => {
 console.log(grouped);
 
 ////acc = accumulator
-
+///{} blank object

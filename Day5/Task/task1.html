@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>map</title>
+</head>
+<body>    
+    <script>
+        const nums = [1, 2, 3, 4];
+
+        const result = nums.map((num) => {
+            return num * num;
+        });
+        console.log(result);
+
+        /////task2  even numbe using filter
+
+        const number = [1, 2, 3, 4, 5, 6];
+
+        const even = number.filter((allEven) => {
+            return allEven % 2 === 0;
+        });
+        console.log("Even Numbers: ", even);
+
+        ////odd number 
+
+        const numbers = [1,2,3,4,5,6];
+        const odd = numbers.filter((oddNumber) => {
+            return oddNumber % 2 !== 0;
+        });
+        console.log("Odd Numbers: ", odd);
+
+        //////task3 total sum
+
+        const numb = [1,2,3,4];
+
+        const sum = numb.reduce((acc, curr) => {
+            return acc + curr;
+        }, 0);
+
+        console.log(sum);
+
+        ///Task 4 ( Important):
+        ///Find name which age > 18
+        const users = [
+            { name: "Ram", age: 20 },
+            { name: "Rahul", age: 15 },
+            { name: "Rohit", age: 19 },
+            { name: "Mangal", age: 37 },
+            { name: "Dhanush", age: 17 }
+        ];
+
+const names = users.filter((user) => {
+    
+});
+
+//   .filter(user => user.age > 18)
+//   .map(user => user.name);
+
+
+    console.log(names); // ["Ram", "Rohit", "Mangal"]
+
+        
+    </script>
+
+</body>
+</html>
