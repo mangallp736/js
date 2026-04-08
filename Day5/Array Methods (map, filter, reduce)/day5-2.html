@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Array Method (map, filter, reduce)</title>
+  </head>
+  <body>
+    <h1>1. map() – Transform</h1>
+  </body>
+</html>
+
+<script>
+  /// Har element ko change karke naya array banata hai
+
+  //////map() Transform karna
+
+  const nums = [1, 2, 3];
+
+  const result = nums.map((num) => {
+    return num * 2;
+  });
+
+  console.log(result);
+
+  //// filter() Select karna
+  const number = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+  const even = number.filter((numb) => {
+    return numb % 2 === 0;
+  });
+
+  console.log(even);
+
+  ///////reduce() Sabko combine karna
+
+  /* Pure array ko ek value me convert karta hai*/
+
+  const numbers = [1, 2, 3, 4];
+
+  const sum = numbers.reduce((acc, curr) => {
+    return acc + curr;
+  }, 0);
+
+  console.log(sum);
+
+  ///acc accumulator (result store karta hai);
+  // curr = curren value
+  ///0 initial value
+</script>
